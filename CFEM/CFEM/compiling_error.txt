@@ -1,0 +1,5 @@
+C:\Users\aravi\AppData\Local\Temp\cciOudl3.o:main.cpp:(.text+0x8d): undefined reference to `FEMSolver::FEMSolver(int)'
+C:\Users\aravi\AppData\Local\Temp\cciOudl3.o:main.cpp:(.text+0xab): undefined reference to `FEMSolver::FEMSolve(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool)'
+C:\Users\aravi\AppData\Local\Temp\cciOudl3.o:main.cpp:(.text+0xc0): undefined reference to `FEMSolver::~FEMSolver()'
+C:\Users\aravi\AppData\Local\Temp\cciOudl3.o:main.cpp:(.text+0xdd): undefined reference to `FEMSolver::~FEMSolver()'
+collect2.exe: error: ld returned 1 exit status
