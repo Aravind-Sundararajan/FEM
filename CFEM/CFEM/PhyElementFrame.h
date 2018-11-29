@@ -4,7 +4,7 @@
 #include "PhyElement.h"
 #include "CFEMTypes_Global.h"
 
-// class PhyElementFrame : public PhyElement means PhyElementFrame is a (public) subclass of PhyElement. 
+// class PhyElementFrame : public PhyElement means PhyElementFrame is a (public) subclass of PhyElement.
 // So it has all the functions and data of PhyEelement beside its own functions and data (for example L, A, E for solid Frame below)
 
 class PhyElementFrame : public PhyElement
@@ -15,6 +15,7 @@ public:
 	virtual void Calculate_ElementStiffness_Force();
 	virtual void SpecificOutput(ostream& out) const;
 	MATRIX kLocalCoordinate;	// kbar page 384
+	MATRIX T_transpose;	
 	MATRIX T;	//page 382
 	// the following are set in setGeometry
 	double c, s;	// cosine and sine of phi used in T matrix

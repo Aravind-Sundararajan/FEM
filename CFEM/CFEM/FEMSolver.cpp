@@ -13,6 +13,15 @@ void FEMSolver::Input(istream& in)
 	// ....
 	// ....
 	// ....
+	string buf.;
+	in >> buf >> dim; // dim 2
+	in >> buf >> ndofpn; // ndofpn 2
+	in >> buf >> buf > nNodes; // Nodes nNodes 3
+	in >> buf >> buf; //id crd
+	nodes.resize(nNodes);
+	for (int i = 0; i <nNode; ++i)
+		nodes[i].set_nndof(ndofpn);
+
 	ElementType eType;
 	int matID;
 	int nNodeInElement;
@@ -35,12 +44,12 @@ void FEMSolver::Input(istream& in)
 		// 2. we can use pe instead pes[i] because it's a pointer (it's an address).
 		// 3. OBVIOUSLY we cannot do this trick with nonpointer data
 
-		pe = pes[i]; 
+		pe = pes[i];
 		in >> pe->matID;		// longer way which was fine: in >> pes[i]->matID;
 								// another way not recommended (*pe).matID
 								// ptr			*ptr	object
 								// object		&object	address of the object
-		
+
 		int nNodeInElement;
 		in >> nNodeInElement;
 		vector<int> eNodesTmp(nNodeInElement);
@@ -49,11 +58,11 @@ void FEMSolver::Input(istream& in)
 		{
 		 in >> eNodesTmp[j];
 		 --eNodesTmp[j];
-		 eNodePtrsTmp[j] = &nodes[eNodesTmp[j]]; // safe here because nodes size never is going to change. If not this causes a very nasty bug to fix ... 
+		 eNodePtrsTmp[j] = &nodes[eNodesTmp[j]]; // safe here because nodes size never is going to change. If not this causes a very nasty bug to fix ...
 		}
-		pe->setNodeConnectivity_Sizes(nNodeInElement, ndofpn, eNodesTmp, eNodePtrsTmp); 
+		pe->setNodeConnectivity_Sizes(nNodeInElement, ndofpn, eNodesTmp, eNodePtrsTmp);
 	}
-	// Reading the rest of the file. 
+	// Reading the rest of the file.
 	//....
 	//....
 	//....
@@ -121,14 +130,14 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 	// can do it as
 //	in >> (*this);
 	in.close();
-	
+
 	/////////////////////////////////////////////////////////////////////////
 	// steps
 
 	// Step 3
 	setSizes();
 	// Step 4; set prescribed dofs: already done when reading the input file
-	// Step 5: Set global free nodal dof: already done when reading the input file 
+	// Step 5: Set global free nodal dof: already done when reading the input file
 	// Step 6 and Step 7: dof positions; Step 7: Set F
 	setPositions_F();
 	// Step 8: Element dof maps Me
@@ -159,13 +168,13 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 void FEMSolver::setSizes()
 {
 	// Complete
-	
+
 }
 
 void FEMSolver::setPositions_F()
 {
 	// Complete
-	
+
 }
 
 void FEMSolver::setElementDofMap_ae()
