@@ -87,6 +87,7 @@ void PhyElementFrame::Calculate_ElementStiffness_Force()
 	 }
 
 	//ke = T_transpose * kLocalCoordinate* T;
+	/*
 	MATRIX	mult.resize(6,6)
 	MATRIX	ke.resize(6,6)
 		for(bi = 0; bi < T_transpose.rows(); ++bi)
@@ -102,6 +103,15 @@ void PhyElementFrame::Calculate_ElementStiffness_Force()
 					{
 							ke[bi][bj] += a[bi][bk] * b[bk][bj];
 					}
+					*/
+					ke.resize(6,6)
+					ke = 0.0;
+					for (int i = 0; i < 6; ++i)
+						for (int j = 0; i < 6; ++i)
+							for (int k = 0; i < 6; ++i)
+								for (int l = 0; i < 6; ++i)
+									ke(i,j) += T(k,i) * kLocalCoordinate(k,1) * T(l,j);
+
 
 }
 
