@@ -61,12 +61,36 @@ void PhyElement::setNodeConnectivity_Sizes(int nNodeInElement, int ndofpnIn, vec
 void PhyElement::setElementDofMap_ae(int ndofpn)
 {
 	// Complete
+	edofs
+
+	
+				edofs(cntr) = dofPtr->v;
+				dofMap[cntr++] = - (dofPtr->pos + 1)
+			}
+			else
+				dofMap[cntr++] = dofPtr->pos;
+		}
+	}
 }
 
 
 void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 {
 	// Complete
+	fee.resize(nedof);
+	if (foe.size() == nedof)
+			fee = foe;
+
+	int I, J;
+	for (int i = 0; i < nedof; ++i)
+	{
+		J = dofMap[j];
+		if (J < 0) // prescribed
+				fee(i) -= ke(i,j) * edofs(j);
+		else
+				globalK(I,J) += ke(i,j);
+	}
+	globalF(I) += fee(i);
 }
 
 void PhyElement::UpdateElementForces_GlobalFp(VECTOR& Fp)
