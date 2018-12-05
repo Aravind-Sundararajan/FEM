@@ -40,9 +40,24 @@ void PhyElementFrame::Calculate_ElementStiffness_Force()
 	kLocalCoordinate = 0.0;
 	kLocalCoordinate(0, 0) = a1;
 	kLocalCoordinate(0, 3) = -a1;
+	kLocalCoordinate(1, 1) = 12.0 * a2;
+	kLocalCoordinate(1, 2) = 6 * L * a2;
+	kLocalCoordinate(1, 4) = -12.0 * a2;
+	kLocalCoordinate(1, 5) = 6 * L * a2;
+	kLocalCoordinate(2, 1) = 6 * L * a2;
+	kLocalCoordinate(2, 2) = 4 * L^2 * a2;
+	kLocalCoordinate(2, 4) = -6 * L * a2;
+	kLocalCoordinate(2, 5) = 2 * L^2 * a2;
 	kLocalCoordinate(3, 0) = -a1;
 	kLocalCoordinate(3, 3) = a1;
-	kLocalCoordinate(1, 1) = 12.0 * a2;
+	kLocalCoordinate(4, 1) = -12.0 * a2;
+	kLocalCoordinate(4, 2) = -6 * L * a2;
+	kLocalCoordinate(4, 3) = 12.0 * a2;
+	kLocalCoordinate(4, 4) = -6 * L * a2;
+	kLocalCoordinate(5, 1) = 6 * L * a2;
+	kLocalCoordinate(5, 2) = 2 * L^2 * a2;
+	kLocalCoordinate(5, 4) = -6 * L * a2;
+	kLocalCoordinate(5, 5) = 4 * L^2 * a2;
 
 	//! 2. Transformation matrix T
 	T.resize(6, 6);
