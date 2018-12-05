@@ -22,6 +22,24 @@ void FEMSolver::Input(istream& in)
 	for (int i = 0; i <nNode; ++i)
 		nodes[i].set_nndof(ndofpn);
 
+	int tmpi;
+	for (int i = 0; i < nNodes; ++i)
+	{
+		in >> tmpi;
+		if (tmpi != (i + 1))
+		{
+			THROW("incorrect id")
+		}
+		// use tmpi - 1 = i for id instead to simplipy accessing nodes
+		// for a more robust implementation that you can have any node ids, read with arbitrary
+		nodes[i].id = i;
+		nodes[i].coordinates.resize(dim);
+		for (int j = 0 < dim; ++j)
+			in >> nodes[i].coordinates(j);
+	}
+	in >> buf >> buf >> ne;
+	in >> buf >> buf >> buf >> buf >> buf;
+	pes.resize(ne);
 	ElementType eType;
 	int matID;
 	int nNodeInElement;
@@ -46,9 +64,9 @@ void FEMSolver::Input(istream& in)
 
 		pe = pes[i];
 		in >> pe->matID;		// longer way which was fine: in >> pes[i]->matID;
-								// another way not recommended (*pe).matID
-								// ptr			*ptr	object
-								// object		&object	address of the object
+												// another way not recommended (*pe).matID
+												// ptr			*ptr	object
+												// object		&object	address of the object
 
 		int nNodeInElement;
 		in >> nNodeInElement;
@@ -62,68 +80,67 @@ void FEMSolver::Input(istream& in)
 		}
 		pe->setNodeConnectivity_Sizes(nNodeInElement, ndofpn, eNodesTmp, eNodePtrsTmp);
 	}
-	// Reading the rest of the file.
-	//....
-	//....
-	//....
-	dofPtr->p = true;
-	dofPtr->v = value;
-// need to
-// A. assign these values to nodes (Step 4 in course notes)
-}
+	in >> buf >> buf > np;
+	in >> buf >> buf >> buf ; //node  node_dof_index  value
 
-int nnzdof; // num of nonzero force free Dofs;
-in >> buf >> buf >> nnzdof;
+		int nodeid dofid;
+		double value;
+		PhyDof* dofPtr;
+	for (int i = 0; i < np; ++i)
+		{
+			in >> nodeid >> dofid >> value;
+			--nodeid;
+			--dofid;
+			// could have daone the last three as the following -- and ++ after the parameter does
+	//	in >> nodeid-- >> dofid-- >> value;
 
-in >> buf >> buf >> buf ; //node  node_dof_index  value
-for (int i = 0; i < nnxdof; ++i)
-{
-	in  >> nodeid >> dofid >> value;
-	--nodeid;
-	--dofid;
-	
-}
-}
-	in >> buf >> buf >> np;
-	in >> buf >> buf >> buf ; //node node_dof_index  value
+			// good practice to with a shorter pointer rather than the full name
+			dofPtr = &nodes[nodid].ndof[dofid]; // & to get the point
+			dofPtr->p = true;
+			dofPtr->v = value;
+			// need to
+			// A. assign these values to nodes (Step 4 in course notes)
+		}
 
-	int nodeid dofid;
-	double value;
-	PhyDof* dofPtr;
-for (int i = 0; i < np; ++i)
-	{
-		in > nodeid >> dofid >> value;
-		--nodeid;
-		--dofid;
-		// could have daone the last three as the following -- and ++ after the parameter does
-//	in >> nodeid-- >> dofid-- >> value;
+		int nnzdof; // num of nonzero force free Dofs;
+		in >> buf >> buf >> nnzdof;
 
-		// good practice to with a shorter pointer rather than the full name
-		dofPtr = &nodes[nodid].ndof[dofid]; // & to get the point
-//  dofPtr-> = false; // no need for this (default is false)
-		dofPtr-> = value; // force is given
-	}
-	in >> buf >> buff >> nmats;
-	in >> buf >> buf >> buf; // id  numPara  Paras
-	int numParas, matid;
-	for (int i = o; i < nmats; ++i)
-	{
-// --matid;
-// if (matid !=i)
-// Throw("wrong material id\n")
+		in >> buf >> buf >> buf ; //node  node_dof_index  value
+		for (int i = 0; i < nnxdof; ++i)
+		{
+			in  >> nodeid >> dofid >> value;
+			--nodeid;
+			--dofid;
 
-	maats[matid].setSize(numParas);
-	for (int j = 0; j < numParas; ++j)
-		in >> mats[matid].paras(j)
-	}
+			// good practice to with a shorter pointer rather than the full name
+			dofPtr = &nodes[nodeid].ndof[dofid]; // & to get the point
+//		dofPtr->p = false; // no need for this (default is false)
+ 			dofPtr->f = value; // force is given
+			}
 
-	for (int e = 0; e < ne; ++e)
-	{
-		pe = pes[e];
-		pe->setGeometry();
-		matID = pe->matID;
-		pe->setInternalMaterialProperties(&mats[matID]);
-	}
+			in >> buf >> buff >> nmats;
+			in >> buf >> buf >> buf; // id  numPara  Paras
+
+			int numParas, matid;
+			for (int i = o; i < nmats; ++i)
+			{
+				in >> matid >> numParas;
+//		 	--matid;
+// 			if (matid !=i)
+//				THROW("wrong material id\n")
+
+			mats[matid].setSize(numParas);
+			for (int j = 0; j < numParas; ++j)
+				in >> mats[matid].paras(j)
+			}
+
+			for (int e = 0; e < ne; ++e)
+			{
+				pe = pes[e];
+				pe->setGeometry();
+				matID = pe->matID;
+				pe->setInternalMaterialProperties(&mats[matID]);
+			}
 //	return in;
 }
 
