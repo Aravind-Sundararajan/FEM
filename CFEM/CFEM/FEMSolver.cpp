@@ -96,6 +96,14 @@ ostream& operator<<(ostream& out, const FEMSolver& dat)
 	for (int node = 0; node < dat.nNodes; ++node)
 		out << dat.nodes[node] << '\n';
 
+	out << "Elements\n";
+	out << "ne\t" << dat.ne << "\n";
+	out << "id ElementType\n";
+	out << "forces(verbose)\n";
+	out << "specific output\n";
+
+	for (int e=0; e<dat.ne; ++e)
+		out << (*dat.pes[e]) << '\n'
 	// Complete the function
 	return out;
 }
