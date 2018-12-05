@@ -1,5 +1,89 @@
-C:\Users\aravi\AppData\Local\Temp\cc7z147j.o:main.cpp:(.text+0x8d): undefined reference to `FEMSolver::FEMSolver(int)'
-C:\Users\aravi\AppData\Local\Temp\cc7z147j.o:main.cpp:(.text+0xab): undefined reference to `FEMSolver::FEMSolve(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool)'
-C:\Users\aravi\AppData\Local\Temp\cc7z147j.o:main.cpp:(.text+0xc0): undefined reference to `FEMSolver::~FEMSolver()'
-C:\Users\aravi\AppData\Local\Temp\cc7z147j.o:main.cpp:(.text+0xdd): undefined reference to `FEMSolver::~FEMSolver()'
-collect2.exe: error: ld returned 1 exit status
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp: In member function 'virtual void PhyElementFrame::Calculate_ElementStiffness_Force()':
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:48:32: error: invalid operands of types 'double' and 'double' to binary 'operator^'
+  kLocalCoordinate(2, 2) = 4 * L^2 * a2;
+                           ~~~~~^~~~~~~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:50:32: error: invalid operands of types 'double' and 'double' to binary 'operator^'
+  kLocalCoordinate(2, 5) = 2 * L^2 * a2;
+                           ~~~~~^~~~~~~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:58:32: error: invalid operands of types 'double' and 'double' to binary 'operator^'
+  kLocalCoordinate(5, 2) = 2 * L^2 * a2;
+                           ~~~~~^~~~~~~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:60:32: error: invalid operands of types 'double' and 'double' to binary 'operator^'
+  kLocalCoordinate(5, 5) = 4 * L^2 * a2;
+                           ~~~~~^~~~~~~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:82:7: error: 'xi' was not declared in this scope
+  for( xi=0;xi<6;i++){
+       ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:82:17: error: 'i' was not declared in this scope
+  for( xi=0;xi<6;i++){
+                 ^
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:83:8: error: 'xj' was not declared in this scope
+   for( xj=0;xj<6;j++)
+        ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:83:18: error: 'j' was not declared in this scope
+   for( xj=0;xj<6;j++)
+                  ^
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:83:18: note: suggested alternative: 'jn'
+   for( xj=0;xj<6;j++)
+                  ^
+                  jn
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:90:13: error: expected initializer before '.' token
+  MATRIX mult.resize(6,6)
+             ^
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:92:15: error: 'bi' was not declared in this scope
+   for(bi = 0; bi < T_transpose.rows(); ++bi)
+               ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:93:16: error: 'bj' was not declared in this scope
+    for(bj = 0; bj < kLocalCoordinate.columns(); ++bj)
+                ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:94:18: error: 'bk' was not declared in this scope
+      for(bk = 0; bk < T_transpose.columns(); ++bk)
+                  ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:99:6: error: 'ai' was not declared in this scope
+  for(ai = 0; ai < mult.rows(); ++ai)
+      ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:99:6: note: suggested alternative: 'a1'
+  for(ai = 0; ai < mult.rows(); ++ai)
+      ^~
+      a1
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:99:19: error: 'mult' was not declared in this scope
+  for(ai = 0; ai < mult.rows(); ++ai)
+                   ^~~~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:100:8: error: 'aj' was not declared in this scope
+    for(aj = 0; aj < T.columns(); ++aj)
+        ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:100:8: note: suggested alternative: 'a1'
+    for(aj = 0; aj < T.columns(); ++aj)
+        ^~
+        a1
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:101:10: error: 'ak' was not declared in this scope
+      for(ak = 0; ak < mult.columns(); ++ak)
+          ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:101:10: note: suggested alternative: 'a1'
+      for(ak = 0; ak < mult.columns(); ++ak)
+          ^~
+          a1
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:103:22: error: 'a' was not declared in this scope
+        ke[bi][bj] += a[bi][bk] * b[bk][bj];
+                      ^
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementFrame.cpp:103:34: error: 'b' was not declared in this scope
+        ke[bi][bj] += a[bi][bk] * b[bk][bj];
+                                  ^
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementTruss.cpp: In member function 'virtual void PhyElementTruss::Calculate_ElementStiffness_Force()':
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementTruss.cpp:34:22: error: lvalue required as increment operand
+  for (int I = 0; I<2 ++I)
+                      ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementTruss.cpp:34:24: error: expected ';' before 'I'
+  for (int I = 0; I<2 ++I)
+                        ^
+                        ;
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementTruss.cpp:35:23: error: lvalue required as increment operand
+   for (int J = 0; J<2 ++J)
+                       ^~
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementTruss.cpp:35:25: error: expected ';' before 'J'
+   for (int J = 0; J<2 ++J)
+                         ^
+                         ;
+C:\Users\aravi\Documents\FEM\CFEM\CFEM\PhyElementTruss.cpp:38:15: error: expected primary-expression before '%' token
+    if (I + J) % 2 != 0
+               ^

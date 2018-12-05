@@ -13,14 +13,14 @@ void FEMSolver::Input(istream& in)
 	// ....
 	// ....
 	// ....
-	string buf.;
+	string buf;
 	in >> buf >> dim; // dim 2
 	in >> buf >> ndofpn; // ndofpn 2
-	in >> buf >> buf > nNodes; // Nodes nNodes 3
+	in >> buf >> buf >> nNodes; // Nodes nNodes 3
 	in >> buf >> buf; //id crd
 	nodes.resize(nNodes);
-	for (int i = 0; i <nNode; ++i)
-		nodes[i].set_nndof(ndofpn);
+	for (int i = 0; i <nNodes; ++i)
+	nodes[i].set_nndof(ndofpn);
 
 	int tmpi;
 	for (int i = 0; i < nNodes; ++i)
@@ -33,9 +33,9 @@ void FEMSolver::Input(istream& in)
 		// use tmpi - 1 = i for id instead to simplipy accessing nodes
 		// for a more robust implementation that you can have any node ids, read with arbitrary
 		nodes[i].id = i;
-		nodes[i].coordinates.resize(dim);
-		for (int j = 0 < dim; ++j)
-			in >> nodes[i].coordinates(j);
+		nodes[i].coordinate.resize(dim);
+		for (int j = 0; j < dim; ++j)
+		in >> nodes[i].coordinate(j);
 	}
 	in >> buf >> buf >> ne;
 	in >> buf >> buf >> buf >> buf >> buf;
@@ -44,13 +44,12 @@ void FEMSolver::Input(istream& in)
 	int matID;
 	int nNodeInElement;
 	PhyElement* pe;
-	int tmpi;
 
 	for (int i = 0; i < ne; ++i)
 	{
 		in >> tmpi;
 		if (tmpi != (i + 1))
-			THROW("incorrect id");
+		THROW("incorrect id");
 
 		in >> tmpi;
 		eType = (ElementType)tmpi;
@@ -64,9 +63,9 @@ void FEMSolver::Input(istream& in)
 
 		pe = pes[i];
 		in >> pe->matID;		// longer way which was fine: in >> pes[i]->matID;
-												// another way not recommended (*pe).matID
-												// ptr			*ptr	object
-												// object		&object	address of the object
+		// another way not recommended (*pe).matID
+		// ptr			*ptr	object
+		// object		&object	address of the object
 
 		int nNodeInElement;
 		in >> nNodeInElement;
@@ -74,74 +73,75 @@ void FEMSolver::Input(istream& in)
 		vector <PhyNode*> eNodePtrsTmp(nNodeInElement);
 		for (int j = 0; j < nNodeInElement; ++j)
 		{
-		 in >> eNodesTmp[j];
-		 --eNodesTmp[j];
-		 eNodePtrsTmp[j] = &nodes[eNodesTmp[j]]; // safe here because nodes size never is going to change. If not this causes a very nasty bug to fix ...
+			in >> eNodesTmp[j];
+			--eNodesTmp[j];
+			eNodePtrsTmp[j] = &nodes[eNodesTmp[j]]; // safe here because nodes size never is going to change. If not this causes a very nasty bug to fix ...
 		}
 		pe->setNodeConnectivity_Sizes(nNodeInElement, ndofpn, eNodesTmp, eNodePtrsTmp);
 	}
-	in >> buf >> buf > np;
-	in >> buf >> buf >> buf ; //node  node_dof_index  value
+	in >> buf >> buf >> np;
+	in >> buf >> buf >> buf; //node  node_dof_index  value
 
-		int nodeid dofid;
-		double value;
-		PhyDof* dofPtr;
+	int nodeid;
+	int dofid;
+	double value;
+	PhyDof* dofPtr;
 	for (int i = 0; i < np; ++i)
-		{
-			in >> nodeid >> dofid >> value;
-			--nodeid;
-			--dofid;
-			// could have daone the last three as the following -- and ++ after the parameter does
-	//	in >> nodeid-- >> dofid-- >> value;
+	{
+		in >> nodeid >> dofid >> value;
+		--nodeid;
+		--dofid;
+		// could have daone the last three as the following -- and ++ after the parameter does
+		//	in >> nodeid-- >> dofid-- >> value;
 
-			// good practice to with a shorter pointer rather than the full name
-			dofPtr = &nodes[nodid].ndof[dofid]; // & to get the point
-			dofPtr->p = true;
-			dofPtr->v = value;
-			// need to
-			// A. assign these values to nodes (Step 4 in course notes)
-		}
+		// good practice to with a shorter pointer rather than the full name
+		dofPtr = &nodes[nodeid].ndof[dofid]; // & to get the point
+		dofPtr->p = true;
+		dofPtr->v = value;
+		// need to
+		// A. assign these values to nodes (Step 4 in course notes)
+	}
 
-		int nnzdof; // num of nonzero force free Dofs;
-		in >> buf >> buf >> nnzdof;
+	int nnzdof; // num of nonzero force free Dofs;
+	in >> buf >> buf >> nnzdof;
 
-		in >> buf >> buf >> buf ; //node  node_dof_index  value
-		for (int i = 0; i < nnxdof; ++i)
-		{
-			in  >> nodeid >> dofid >> value;
-			--nodeid;
-			--dofid;
+	in >> buf >> buf >> buf ; //node  node_dof_index  value
+	for (int i = 0; i < nnzdof; ++i)
+	{
+		in  >> nodeid >> dofid >> value;
+		--nodeid;
+		--dofid;
 
-			// good practice to with a shorter pointer rather than the full name
-			dofPtr = &nodes[nodeid].ndof[dofid]; // & to get the point
-//		dofPtr->p = false; // no need for this (default is false)
- 			dofPtr->f = value; // force is given
-			}
+		// good practice to with a shorter pointer rather than the full name
+		dofPtr = &nodes[nodeid].ndof[dofid]; // & to get the point
+		//		dofPtr->p = false; // no need for this (default is false)
+		dofPtr->f = value; // force is given
+	}
 
-			in >> buf >> buff >> nmats;
-			in >> buf >> buf >> buf; // id  numPara  Paras
+	in >> buf >> buf >> nmats;
+	in >> buf >> buf >> buf; // id  numPara  Paras
 
-			int numParas, matid;
-			for (int i = o; i < nmats; ++i)
-			{
-				in >> matid >> numParas;
-//		 	--matid;
-// 			if (matid !=i)
-//				THROW("wrong material id\n")
+	int numParas, matid;
+	for (int i = 0; i < nmats; ++i)
+	{
+		in >> matid >> numParas;
+		//		 	--matid;
+		// 			if (matid !=i)
+		//				THROW("wrong material id\n")
 
-			mats[matid].setSize(numParas);
-			for (int j = 0; j < numParas; ++j)
-				in >> mats[matid].paras(j)
-			}
+		mats[matid].setSize(numParas);
+		for (int j = 0; j < numParas; ++j)
+		in >> mats[matid].paras(j);
+	}
 
-			for (int e = 0; e < ne; ++e)
-			{
-				pe = pes[e];
-				pe->setGeometry();
-				matID = pe->matID;
-				pe->setInternalMaterialProperties(&mats[matID]);
-			}
-//	return in;
+	for (int e = 0; e < ne; ++e)
+	{
+		pe = pes[e];
+		pe->setGeometry();
+		matID = pe->matID;
+		pe->setInternalMaterialProperties(&mats[matID]);
+	}
+	//	return in;
 }
 
 istream& operator>>(istream& input, FEMSolver& dat)
@@ -162,8 +162,8 @@ ostream& operator<<(ostream& out, const FEMSolver& dat)
 		out << "prescribed_boolean(verbose)\n";
 	}
 	for (int node = 0; node < dat.nNodes; ++node)
-		out << dat.nodes[node] << '\n';
-
+	out << dat.nodes[node] << '\n';
+	// Complete the function
 	out << "Elements\n";
 	out << "ne\t" << dat.ne << "\n";
 	out << "id ElementType\n";
@@ -171,8 +171,8 @@ ostream& operator<<(ostream& out, const FEMSolver& dat)
 	out << "specific output\n";
 
 	for (int e=0; e<dat.ne; ++e)
-		out << (*dat.pes[e]) << '\n'
-	// Complete the function
+		out << (*dat.pes[e]) << '\n';
+
 	return out;
 }
 
@@ -186,7 +186,7 @@ FEMSolver::~FEMSolver()
 	// ne should be equal to pes.size()
 	// still a better practice is
 	for (int i = 0; i < pes.size(); ++i)
-		delete pes[i];
+	delete pes[i];
 }
 
 
@@ -204,7 +204,7 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 	// reading data
 	Input(in);
 	// can do it as
-//	in >> (*this);
+	//	in >> (*this);
 	in.close();
 
 	/////////////////////////////////////////////////////////////////////////
@@ -227,7 +227,7 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 	// Step 12: Solve global (free) dof a from Ka = F
 	// successful solution returns true
 	if (Solve_Dofs() == false)
-		THROW("Matrix solve failed\n");
+	THROW("Matrix solve failed\n");
 	// Step 13: Assign a to nodes and elements
 	Assign_dof();
 	// Step 14: Compute prescribed dof forces
@@ -257,7 +257,7 @@ void FEMSolver::setElementDofMap_ae()
 {
 	PhyElement* pe;
 	for (int e = 0; e < ne; ++e)
-		pes[e]->setElementDofMap_ae(ndofpn);
+	pes[e]->setElementDofMap_ae(ndofpn);
 }
 
 
@@ -265,14 +265,14 @@ void FEMSolver::Calculate_ElementStiffness_Force()
 {
 	PhyElement* pe;
 	for (int e = 0; e < ne; ++e)
-		pes[e]->Calculate_ElementStiffness_Force();
+	pes[e]->Calculate_ElementStiffness_Force();
 }
 
 void FEMSolver::Assemble()
 {
 	PhyElement* pe;
 	for (int e = 0; e < ne; ++e)
-		pes[e]->AssembleStiffnessForce(K, F);
+	pes[e]->AssembleStiffnessForce(K, F);
 }
 
 bool FEMSolver::Solve_Dofs()
