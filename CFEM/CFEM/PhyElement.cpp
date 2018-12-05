@@ -62,8 +62,32 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 {
 	// Complete
 	edofs
-
+// Step 8:
+	ecdof = 1 // dof counter for element
+	for en = 1: neNodes // number of element nodes
+		gn = LEM(en) // global node number for element node en
+		for endof = 1: ndofpn // This number isxed now, e.g., 2 for 2D trusses
+			dofMap(ecdof) = node(gn).dof(endof).pos
+				//gndof = endof, we bypass some steps here
+			ecdof = ecdof + 1 // increment counter
+		end
+	end
 	
+// Step 9:
+	dofs = zeros(nedof) // element dofs (edof) resized to number of element dofs and zeroed
+	ecdof = 1 // dof counter for element
+	for en = 1: neNodes // number of element nodes
+		gn = LEM(en) // global node number for element node en
+		for endof = 1: ndofpn // This number isxed now, e.g., 2 for 2D trusses
+			if (node(gn).dof(endof).p == true) // gndof = endof we bypass some steps here
+				dofs(ecdof) = node(gn).dof(endof).value; // e dof val = corresponding global val
+			end
+			dofMap(ecdof) = node(gn).dof(endof).pos
+			ecdof = ecdof + 1 // increment counter
+		end
+	end
+
+// End of his code that we borrow
 				edofs(cntr) = dofPtr->v;
 				dofMap[cntr++] = - (dofPtr->pos + 1)
 			}
@@ -73,24 +97,34 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 	}
 }
 
-
+// Step 10 is: Compute element stiness/force (ke, foe (fre: source term; fNe: Neumann BC))
+//Equals 0!
 void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 {
 	// Complete
+	// Step 11
 	fee.resize(nedof);
 	if (foe.size() == nedof)
 			fee = foe;
+	else
+			fee = 0.0;
 
 	int I, J;
 	for (int i = 0; i < nedof; ++i)
 	{
-		J = dofMap[j];
-		if (J < 0) // prescribed
-				fee(i) -= ke(i,j) * edofs(j);
-		else
-				globalK(I,J) += ke(i,j);
-	}
+		I = dofMap[i];
+		if (I < 0) // prescribed dof
+			continue
+		for (int j = 0; j < nedof; ++j)
+		{
+			J = dofMap[j];
+			if (J < 0) // prescribed
+					fee(i) -= ke(i,j) * edofs(j);
+			else
+					globalK(I,J) += ke(i,j);
+		}
 	globalF(I) += fee(i);
+	}
 }
 
 void PhyElement::UpdateElementForces_GlobalFp(VECTOR& Fp)

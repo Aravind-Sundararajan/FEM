@@ -251,6 +251,20 @@ void FEMSolver::setPositions_F()
 {
 	// Complete
 
+	posf = 0, posp = 0
+	for n = 1:nNodes
+		for do = 1: node(n).nndof // num dof for node (n)
+			if node(n).ndof(do).p == true // prescribed dof
+				posp = posp - 1;
+				node(n).ndof(do).pos = posp;
+			else free // dof
+				posf = posf + 1;
+				node(n).ndof(do).pos = posf;
+				F(posf) = node(n).ndof(do).f
+			end
+		end
+	end
+
 }
 
 void FEMSolver::setElementDofMap_ae()
