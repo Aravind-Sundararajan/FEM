@@ -66,6 +66,57 @@ void FEMSolver::Input(istream& in)
 	//....
 	//....
 	//....
+	dofPtr->p = true;
+	dofPtr->v = value;
+// need to
+// A. assign these values to nodes (Step 4 in course notes)
+}
+
+int nnzdof; // num of nonzero force free Dofs;
+in >> buf >> buf >> nnzdof;
+
+in >> buf >> buf >> buf ; //node  node_dof_index  value
+for (int i = 0; i < nnxdof; ++i)
+{
+	in  >> nodeid >> dofid >> value;
+	--nodeid;
+	--dofid;
+	
+}
+}
+	in >> buf >> buf >> np;
+	in >> buf >> buf >> buf ; //node node_dof_index  value
+
+	int nodeid dofid;
+	double value;
+	PhyDof* dofPtr;
+for (int i = 0; i < np; ++i)
+	{
+		in > nodeid >> dofid >> value;
+		--nodeid;
+		--dofid;
+		// could have daone the last three as the following -- and ++ after the parameter does
+//	in >> nodeid-- >> dofid-- >> value;
+
+		// good practice to with a shorter pointer rather than the full name
+		dofPtr = &nodes[nodid].ndof[dofid]; // & to get the point
+//  dofPtr-> = false; // no need for this (default is false)
+		dofPtr-> = value; // force is given
+	}
+	in >> buf >> buff >> nmats;
+	in >> buf >> buf >> buf; // id  numPara  Paras
+	int numParas, matid;
+	for (int i = o; i < nmats; ++i)
+	{
+// --matid;
+// if (matid !=i)
+// Throw("wrong material id\n")
+
+	maats[matid].setSize(numParas);
+	for (int j = 0; j < numParas; ++j)
+		in >> mats[matid].paras(j)
+	}
+
 	for (int e = 0; e < ne; ++e)
 	{
 		pe = pes[e];
