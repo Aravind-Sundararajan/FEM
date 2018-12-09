@@ -72,7 +72,7 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 			ecdof = ecdof + 1 // increment counter
 		end
 	end
-	
+
 // Step 9:
 	dofs = zeros(nedof) // element dofs (edof) resized to number of element dofs and zeroed
 	ecdof = 1 // dof counter for element
@@ -97,7 +97,7 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 	}
 }
 
-// Step 10 is: Compute element stiness/force (ke, foe (fre: source term; fNe: Neumann BC))
+// Step 10 is: Compute element stiffness/force (ke, foe (fre: source term; fNe: Neumann BC))
 //Equals 0!
 void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 {

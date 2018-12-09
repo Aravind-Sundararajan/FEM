@@ -9,7 +9,7 @@
 
 // Shape is the parent class
 // polygon is a subclass of shape becuase it is a shape but more specific with potentially more data members and functions (here a list of corner vertices are additional data)
-// subclasses are 
+// subclasses are
 //					bigger (often more functions and data)
 //					more specific (subset of class)
 
@@ -34,14 +34,14 @@ class PhyElement
 public:
 	virtual void setGeometry() = 0;
 	virtual void setInternalMaterialProperties(PhyMaterial* pMat) = 0;
-	void setNodeConnectivity_Sizes(int nNodeInElement, int ndofpnIn, vector<int>& eNodesIn, vector <PhyNode*>& eNodePtrsIn); 
+	void setNodeConnectivity_Sizes(int nNodeInElement, int ndofpnIn, vector<int>& eNodesIn, vector <PhyNode*>& eNodePtrsIn);
 
 	void print(ostream& out);
 	// Step 8: Element dof maps Me
 	// Step 9: Set element dofs ae
 	void setElementDofMap_ae(int ndofpn);
 
-	// Step 10: Compute element stiness/force (ke, foe (fre: source term; fNe: Neumann BC))
+	// Step 10: Compute element stiffness/force (ke, foe (fre: source term; fNe: Neumann BC))
 	virtual void Calculate_ElementStiffness_Force() = 0;
 
 	// Step 11: Assembly from local to global system
@@ -57,7 +57,7 @@ public:
 	int id;
 	int neNodes; // # element nodes
 	vector<int> eNodes; // element node vector
-	vector <PhyNode*> eNodePtrs; 
+	vector <PhyNode*> eNodePtrs;
 	int nedof; // # element dof
 	VECTOR edofs; // element dofs
 	vector<int> dofMap;

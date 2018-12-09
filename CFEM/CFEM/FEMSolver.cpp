@@ -171,7 +171,7 @@ ostream& operator<<(ostream& out, const FEMSolver& dat)
 	out << "specific output\n";
 
 	for (int e=0; e<dat.ne; ++e)
-		out << (*dat.pes[e]) << '\n';
+	out << (*dat.pes[e]) << '\n';
 
 	return out;
 }
@@ -244,26 +244,28 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 void FEMSolver::setSizes()
 {
 	// Complete
-
+	PhyElement* pe;
+	for (int e = 0; e < ne; ++e)
+	pes[e]->setNodeConnectivity_Sizes(ndofpn);
 }
 
 void FEMSolver::setPositions_F()
 {
 	// Complete
-
 	posf = 0, posp = 0
-	for n = 1:nNodes
-		for do = 1: node(n).nndof // num dof for node (n)
-			if node(n).ndof(do).p == true // prescribed dof
+	for (int n = 1;n < nNodes; ++n) {
+		for (do = 1; do < node(n).nndof; ++do){ // num dof for node (n)
+			if (node(n).ndof(do).p == true){ // prescribed dof
 				posp = posp - 1;
 				node(n).ndof(do).pos = posp;
-			else free // dof
+			}
+			else {  //free dof
 				posf = posf + 1;
 				node(n).ndof(do).pos = posf;
-				F(posf) = node(n).ndof(do).f
-			end
-		end
-	end
+				F(posf) = node(n).ndof(do).f;
+			}
+		}
+	}
 
 }
 
@@ -301,6 +303,26 @@ bool FEMSolver::Solve_Dofs()
 void FEMSolver::Assign_dof()
 {
 	//Complete
+	//assign to nodes
+	for (int n = 1; n < nNodes; ++n) {
+		for (int dofi = 1; dofi< node(n).nndof; ++dofi) {//num dof for node (n)
+			if (node(n).ndof(dofi).p == false) {//free dof
+				posn = node(n).ndof(dofi).pos; //position of dof in global free F
+				node(n).ndof(dofi).v = dofs(posn); //set free dof val to corresponding val in global dofs (a)
+			}
+		}
+	}
+	// assign to elements
+	for (int e = 1; e < ne; ++e){// loop over elements
+		for (int i =1; i < element(e).nedof; ++i){ //loop over element dofs; nedof = # dof (nedof )
+			posn = element(e).dofMap(i) //corresponding global position using dofMat (Met)
+			if (posn > 0) {//free dof
+				element(e).edofs(i) = dofs(posn);
+				//set free element dof ae to corresponding val in global dofs (a)
+			}
+		}
+	}
+
 }
 
 void FEMSolver::UpdateFpNodalPrescribedForces()
