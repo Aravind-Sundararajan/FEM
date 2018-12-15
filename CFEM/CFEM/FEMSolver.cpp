@@ -67,7 +67,7 @@ void FEMSolver::Input(istream& in)
 		// ptr			*ptr	object
 		// object		&object	address of the object
 
-		int nNodeInElement;
+		//int nNodeInElement;
 		in >> nNodeInElement;
 		vector<int> eNodesTmp(nNodeInElement);
 		vector <PhyNode*> eNodePtrsTmp(nNodeInElement);
@@ -141,7 +141,12 @@ void FEMSolver::Input(istream& in)
 		matID = pe->matID;
 		pe->setInternalMaterialProperties(&mats[matID]);
 	}
-	//	return in;
+		//return in;
+		//verifying the input
+		cout << "dim " << dim << "\n";
+		cout << "ndofpn " << ndofpn << "\n";
+		cout << "nNodes " << nNodes << "\n";
+		cout << "nElements " << ne << "\n";
 }
 
 istream& operator>>(istream& input, FEMSolver& dat)
@@ -220,49 +225,53 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 	// Step 9: Set element dofs ae
 	setElementDofMap_ae();
 	// Step 10: Compute element stiness
-	Calculate_ElementStiffness_Force();
+	//Calculate_ElementStiffness_Force();
 
 	// Step 11: Assembly from local to global system
-	Assemble();
+	//Assemble();
 	// Step 12: Solve global (free) dof a from Ka = F
 	// successful solution returns true
-	if (Solve_Dofs() == false)
-	THROW("Matrix solve failed\n");
+//	if (Solve_Dofs() == false)
+//	THROW("Matrix solve failed\n");
 	// Step 13: Assign a to nodes and elements
-	Assign_dof();
+//	Assign_dof();
 	// Step 14: Compute prescribed dof forces
-	UpdateFpNodalPrescribedForces();
+	//UpdateFpNodalPrescribedForces();
 
 	/////////////////////////////////////////////////////////////////////////
 	// output
-	string outputFileName;
-	outputFileName = runName + "Output.txt";
-	fstream out(outputFileName.c_str(), ios::out);
-	out << (*this);
+//	string outputFileName;
+//	outputFileName = runName + "Output.txt";
+//	fstream out(outputFileName.c_str(), ios::out);
+//	out << (*this);
 }
 
 void FEMSolver::setSizes()
 {
 	// Complete
-	PhyElement* pe;
-	for (int e = 0; e < ne; ++e)
-	pes[e]->setNodeConnectivity_Sizes(ndofpn);
+K.resize(ndof,ndof);
+F.resize(ndof);
+	//PhyElement* pe;
+	//for (int e = 0; e < ne; ++e)
+	//pes[e]->setNodeConnectivity_Sizes(nNodeInElement, ndofpn, eNodesTmp, eNodePtrsTmp);
 }
 
 void FEMSolver::setPositions_F()
 {
 	// Complete
-	posf = 0, posp = 0
+	int posf = 0;
+	int posp = 0;
 	for (int n = 1;n < nNodes; ++n) {
-		for (do = 1; do < node(n).nndof; ++do){ // num dof for node (n)
-			if (node(n).ndof(do).p == true){ // prescribed dof
+		 //&nodes[n].ndof[n]->v
+		for (int d = 1; d <nodes[n].ndof[n].v; ++d){ // num dof for node (n)
+			if (nodes[n].ndof[d].p == true){ // prescribed dof
 				posp = posp - 1;
-				node(n).ndof(do).pos = posp;
+				nodes[n].ndof[d].pos = posp;
 			}
 			else {  //free dof
 				posf = posf + 1;
-				node(n).ndof(do).pos = posf;
-				F(posf) = node(n).ndof(do).f;
+				nodes[n].ndof[d].pos = posf;
+				F(posf) = nodes[n].ndof[d].f;
 			}
 		}
 	}
@@ -275,7 +284,7 @@ void FEMSolver::setElementDofMap_ae()
 	for (int e = 0; e < ne; ++e)
 	pes[e]->setElementDofMap_ae(ndofpn);
 }
-
+/*
 
 void FEMSolver::Calculate_ElementStiffness_Force()
 {
@@ -336,3 +345,4 @@ void FEMSolver::UpdateFpNodalPrescribedForces()
 	for (int n = 0; n < nNodes; ++n) //loop over the elements
 	pes[e]->UpdateElementForces_GlobalFp(F);
 }
+*/

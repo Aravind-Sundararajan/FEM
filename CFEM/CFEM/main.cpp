@@ -19,6 +19,6 @@ int main()
 	cin >> tmpi;
 	verboseIn = (bool)tmpi;
 	FEMSolver femSolver;
-	//femSolver.FEMSolve(runName, verboseIn);
+	femSolver.FEMSolve(runName, verboseIn);
 	return 0;
 }

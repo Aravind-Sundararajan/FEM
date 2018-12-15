@@ -18,11 +18,11 @@ public:
 
 	// input function
 	// 1. friend? so the following function can access private members in this class
-	//			both classes and functions can be declared as friends. 
+	//			both classes and functions can be declared as friends.
 	//			for example we can write
 	// friend PhyElement;
 	//	if all data/functions in this class is public, we don't need to declare this as friend
-	//	this is not a function of the class. Let's say we have 
+	//	this is not a function of the class. Let's say we have
 	//	FEMSolver solver;
 	//	to call assemble on solve rwe need to write:	solver.Assemble();
 	//	but the following is not a member function; IT'S ONLY DECLARED HERE TO MAKE A MAKE IT A FRIEND
@@ -32,7 +32,7 @@ public:
 	// Polynomial p1, p2
 	// Polynomial p3 = p1 + p2;
 	// then you overload + operators
-	//		>>			is an operator for readig in data 
+	//		>>			is an operator for readig in data
 	// How it's used
 	//	FEMSolver solver;
 	//	fstream in(name, ios::in);
@@ -54,7 +54,7 @@ public:
 	// Step 3
 	void setSizes();
 	// Step 4; set prescribed dofs: already done when reading the input file
-	// Step 5: Set global free nodal dof: already done when reading the input file 
+	// Step 5: Set global free nodal dof: already done when reading the input file
 	// Step 6 and Step 7: dof positions; Step 7: Set F
 	void setPositions_F();
 	// Step 8: Element dof maps Me
@@ -89,7 +89,11 @@ public:
 	MATRIX K; //stiffness matrix
 	VECTOR F; // Force vector
 	VECTOR Fp;	// vector of prescribed dof forces
-
+	//int nNodeInElement; //number of nodes per element
+	//vector<int> eNodesTmp;//
+	//vector <PhyNode*> eNodePtrsTmp;//
+	int posf;
+	int posp;
 	int nmats;	// number of materials
 	map<int, PhyMaterial> mats;
 };

@@ -17,9 +17,10 @@ public:
 	void set_nndof(int nndofIn);
 	void UpdateNodePrescribedDofForces(VECTOR& Fp);
 	ID id;
-	VECTOR coordinate;	
+	VECTOR coordinate;
 	vector <PhyDof> ndof;
 	int nndof;	// number of dofs
+	int posn;
 };
 
 ostream& operator<<(ostream& out, const PhyNode& node);

@@ -61,15 +61,17 @@ void PhyElement::setNodeConnectivity_Sizes(int nNodeInElement, int ndofpnIn, vec
 void PhyElement::setElementDofMap_ae(int ndofpn)
 {
 	// Complete
-	edofs
+	//edofs
 	// Step 8:
-	ecdof = 1; // dof counter for element
+	/*
+	int gn;
+	int ecdof = 1; // dof counter for element
 	for (int en = 1; en < neNodes; ++en)
 	{ // number of element nodes
-		gn = LEM(en); // global node number for element node en
+		gn = LEM[en]; // global node number for element node en
 		for (int endof = 1;endof < ndofpn; ++endof) // This number isxed now, e.g., 2 for 2D trusses
 		{
-			dofMap(ecdof) = node(gn).dof(endof).pos;
+			dofMap[ecdof] = node[gn].dof[endof].pos;
 			//gndof = endof, we bypass some steps here
 			ecdof = ecdof + 1; // increment counter
 		}
@@ -80,13 +82,13 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 	ecdof = 1; // dof counter for element
 	for (int en = 1; en < neNodes; ++en)
 	{ // number of element nodes
-		gn = LEM(en); // global node number for element node en
+		gn = LEM[en]; // global node number for element node en
 		for (int endof = 1;endof < ndofpn; ++endof)
 		{ // This number isxed now, e.g., 2 for 2D trusses
-			if (node(gn).dof(endof).p == true) // gndof = endof we bypass some steps here
-			dofs(ecdof) = node(gn).dof(endof).value; // e dof val = corresponding global val
+			if (node[gn].dof[endof].p == true) // gndof = endof we bypass some steps here
+			dofs[ecdof] = node[gn].dof[endof].value; // e dof val = corresponding global val
 		}
-		dofMap(ecdof) = node(gn).dof(endof).pos;
+		dofMap[ecdof] = node[gn].dof[endof].pos;
 		ecdof = ecdof + 1; // increment counter
 	}
 	/*
@@ -99,6 +101,7 @@ dofMap[cntr++] = dofPtr->pos;
 }
 }
 */
+
 }
 
 // Step 10 is: Compute element stiffness/force (ke, foe (fre: source term; fNe: Neumann BC))
@@ -106,6 +109,7 @@ dofMap[cntr++] = dofPtr->pos;
 void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 {
 	// Complete
+	/*
 	// Step 11
 	fee.resize(nedof);
 	if (foe.size() == nedof)
@@ -129,11 +133,13 @@ void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 		}
 		globalF(I) += fee(i);
 	}
+	*/
 }
 
 void PhyElement::UpdateElementForces_GlobalFp(VECTOR& Fp)
 {
 	// Complete
+	/*
 	for (int e = 1; e < ne; ++e) //loop over elements
 	{
 		fee = feo; //element total force = element all forces except essential force
@@ -143,12 +149,13 @@ void PhyElement::UpdateElementForces_GlobalFp(VECTOR& Fp)
 		{
 			for (int j = 1; j < nedof; ++j) //loop over columns of ke. ALL columns (dofs) of p and f used
 			{
-				fee(i) = fee(i) - ke(i, j) * edofs(j); //edofs: element dofs = a e
+				fee[i] = fee[i] - ke[i, j] * edofs[j]; //edofs: element dofs = a e
 			}
-			Fp(-I) = Fp(-I) - fee(i);
+			Fp[-I] = Fp[-I] - fee[i];
 		}
 		//1. element’s total force fee component i’th is computed→added to Fp(-I)
 		//2. -I used because I < 0: prescribed dof
 		//3. fee is subtracted
 	}
+	*/
 }

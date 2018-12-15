@@ -45,9 +45,9 @@ void PhyElementFrame::Calculate_ElementStiffness_Force()
 	kLocalCoordinate(1, 4) = -12.0 * a2;
 	kLocalCoordinate(1, 5) = 6 * L * a2;
 	kLocalCoordinate(2, 1) = 6 * L * a2;
-	kLocalCoordinate(2, 2) = 4 * L^2 * a2;
+	kLocalCoordinate(2, 2) = 4 * pow(L,2) * a2;
 	kLocalCoordinate(2, 4) = -6 * L * a2;
-	kLocalCoordinate(2, 5) = 2 * L^2 * a2;
+	kLocalCoordinate(2, 5) = 2 * pow(L,2) * a2;
 	kLocalCoordinate(3, 0) = -a1;
 	kLocalCoordinate(3, 3) = a1;
 	kLocalCoordinate(4, 1) = -12.0 * a2;
@@ -55,9 +55,9 @@ void PhyElementFrame::Calculate_ElementStiffness_Force()
 	kLocalCoordinate(4, 3) = 12.0 * a2;
 	kLocalCoordinate(4, 4) = -6 * L * a2;
 	kLocalCoordinate(5, 1) = 6 * L * a2;
-	kLocalCoordinate(5, 2) = 2 * L^2 * a2;
+	kLocalCoordinate(5, 2) = 2 * pow(L,2) * a2;
 	kLocalCoordinate(5, 4) = -6 * L * a2;
-	kLocalCoordinate(5, 5) = 4 * L^2 * a2;
+	kLocalCoordinate(5, 5) = 4 * pow(L,2) * a2;
 
 	//! 2. Transformation matrix T
 	T.resize(6, 6);
@@ -78,13 +78,15 @@ void PhyElementFrame::Calculate_ElementStiffness_Force()
 	T(5, 5) = 1;
 
 	//step 3: calculate k as k=T transpose * kbar  * T
+	/*
 	T_transpose.resize(6, 6);
-	for( xi=0;xi<6;i++){
-		for( xj=0;xj<6;j++)
+	for(int xi=0;xi<6;i++){
+		for(int xj=0;xj<6;j++)
 		{
 				T_transpose[j][i]=T[i][j];
 		}
 	 }
+	 */
 
 	//ke = T_transpose * kLocalCoordinate* T;
 	/*
@@ -104,7 +106,7 @@ void PhyElementFrame::Calculate_ElementStiffness_Force()
 							ke[bi][bj] += a[bi][bk] * b[bk][bj];
 					}
 					*/
-					ke.resize(6,6)
+					ke.resize(6,6);
 					ke = 0.0;
 					for (int i = 0; i < 6; ++i)
 						for (int j = 0; i < 6; ++i)

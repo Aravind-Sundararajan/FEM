@@ -31,11 +31,11 @@ void PhyElementTruss::Calculate_ElementStiffness_Force()
 	//step 3: calculate k as k=T transpose * kbar  * T
 	ke.resize(4,4);
 	double factor = A * E /L;
-	for (int I = 0; I<2 ++I)
-		for (int J = 0; J<2 ++J)
+	for (int I = 0; I<2; ++I)
+		for (int J = 0; J<2; ++J)
 		{
 			double f2 = -factor;
-			if (I + J) % 2 != 0
+			if ((I + J) % 2 != 0)
 				f2 = -factor;
 			ke(I,J) = c*c*f2;
 			ke(I+1,J) = ke(I,J+1) = c*s*f2;
