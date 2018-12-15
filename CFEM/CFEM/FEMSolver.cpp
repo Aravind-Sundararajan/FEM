@@ -328,4 +328,11 @@ void FEMSolver::Assign_dof()
 void FEMSolver::UpdateFpNodalPrescribedForces()
 {
 	// Complete
+	PhyElement* pe;
+	for (int e = 0; e < ne; ++e) //loop over the elements
+	pes[e]->UpdateElementForces_GlobalFp(F);
+
+	PhyNode* pn;
+	for (int n = 0; n < nNodes; ++n) //loop over the elements
+	pes[e]->UpdateElementForces_GlobalFp(F);
 }

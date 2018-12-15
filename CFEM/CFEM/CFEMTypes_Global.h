@@ -9,13 +9,13 @@
 #include <fstream>  /* file streams for input and output */
 #include <assert.h>     /* assert */
 // for C++ built-in template vector class. Template means we can change the type of components of the vector. For example we can have a vector of integer, double, etc.
-#include <vector>  
+#include <vector>
 
 // for map data structure. For data corresponding to ids (material ids, geometry ids, ...) they may better be stored in maps rather than vectors
-#include <map>	 
+#include <map>
 
 // many classes and functions are within "namespaces". This is similar to having streets within a city. Ney York::Broadway Street; Chicago::Broadway, etc.
-// To point to these specific functions, classes, etc. we need to use their containing namespace followed by "resolution operator" and finally the function or class 
+// To point to these specific functions, classes, etc. we need to use their containing namespace followed by "resolution operator" and finally the function or class
 // for example to print on screen we write std::cout because cout belongs to std namespace
 // If we write "using namespace X" even if we do not write std:: C++ can find cout because we have already requested to look within that namespace (similar to giving addresses within a city)
 // std is common namespace for many C++ build-in functions and classes
@@ -23,7 +23,7 @@
 #include <cmath>   // for certain math operators (fabs, sqrt, ...)
 
 
-using namespace std;	
+using namespace std;
 
 //#define USE_BLITZ	1
 
@@ -49,7 +49,7 @@ using namespace std;
 #if DEBUG_MODE
 #define DB(x) x
 #else
-#define DB(x) 
+#define DB(x)
 #endif
 
 // Other examples of macro for Min Max operators
@@ -70,7 +70,7 @@ using namespace std;
 typedef enum {etDefault, etBar, etBeam, etTruss, etFrame} ElementType;
 
 // The following is a common C++ practice that we create another name for a build-in C++ type (or user specified class) for better readability.
-// egain something like ID better suggests we are referring to an id 
+// egain something like ID better suggests we are referring to an id
 // it also makes changing this type (e.g. from long to long long) much easier as the change only needs to be done here.
 typedef long ID;
 
