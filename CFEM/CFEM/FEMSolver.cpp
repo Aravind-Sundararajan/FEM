@@ -261,9 +261,9 @@ void FEMSolver::setPositions_F()
 	// Complete
 	int posf = 0;
 	int posp = 0;
-	for (int n = 1;n < nNodes; ++n) {
+	for (int n = 0;n < nNodes; ++n) {
 		 //&nodes[n].ndof[n]->v
-		for (int d = 1; d <nodes[n].ndof[n].v; ++d){ // num dof for node (n)
+		for (int d = 0; d <nodes[n].ndof[n].v; ++d){ // num dof for node (n)
 			if (nodes[n].ndof[d].p == true){ // prescribed dof
 				posp = posp - 1;
 				nodes[n].ndof[d].pos = posp;
@@ -275,7 +275,6 @@ void FEMSolver::setPositions_F()
 			}
 		}
 	}
-
 }
 
 void FEMSolver::setElementDofMap_ae()

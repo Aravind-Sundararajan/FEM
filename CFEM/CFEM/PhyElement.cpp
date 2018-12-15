@@ -63,7 +63,22 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 	// Complete
 	//edofs
 	// Step 8:
-	/*
+	// End of his code that we borrow
+	dofMap.resize(nedof);
+	int cntr = 0;
+	for (int en = 0; en < neNodes; ++en)
+	{
+		for (int endof = 0; endof < ndofpn; ++endof)
+		{
+			if (eNodePtrs[en]->ndof[endof].p == true)
+			{
+				edofs(cntr) = eNodePtrs[en]->ndof[endof].v;
+			}
+			  dofMap[cntr] = eNodePtrs[en]->ndof[endof].pos;
+			cntr= cntr+1;
+		}
+	}
+/*
 	int gn;
 	int ecdof = 1; // dof counter for element
 	for (int en = 1; en < neNodes; ++en)
@@ -91,16 +106,8 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 		dofMap[ecdof] = node[gn].dof[endof].pos;
 		ecdof = ecdof + 1; // increment counter
 	}
-	/*
-	// End of his code that we borrow
-	edofs(cntr) = dofPtr->v;
-	dofMap[cntr++] = - (dofPtr->pos + 1)
-}
-else
-dofMap[cntr++] = dofPtr->pos;
-}
-}
 */
+/*
 
 }
 
