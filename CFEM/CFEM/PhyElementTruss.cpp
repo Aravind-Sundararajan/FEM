@@ -41,6 +41,8 @@ void PhyElementTruss::Calculate_ElementStiffness_Force()
 			ke(I+1,J) = ke(I,J+1) = c*s*f2;
 			ke(I+1,J+1) = s*s*f2;
 		}
+		cout << ke << "\n";
+
 }
 
 void PhyElementTruss::SpecificOutput(ostream& out) const

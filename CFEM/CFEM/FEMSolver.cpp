@@ -212,8 +212,7 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 	//	in >> (*this);
 	in.close();
 
-	ndof = nNodes*ndofpn;
-	nf = ndof - np;
+
 
 	/////////////////////////////////////////////////////////////////////////
 	// steps
@@ -257,9 +256,12 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 void FEMSolver::setSizes()
 {
 
+	ndof = nNodes*ndofpn;
+	nf = ndof - np;
 	// Complete
-	K.resize(ndof,ndof);
-	F.resize(ndof);
+	K.resize(nf,nf);
+	F.resize(nf);
+	Fp.resize(nf);
 	//PhyElement* pe;
 	//for (int e = 0; e < ne; ++e)
 	//pes[e]->setNodeConnectivity_Sizes(nNodeInElement, ndofpn, eNodesTmp, eNodePtrsTmp);
@@ -272,7 +274,8 @@ void FEMSolver::setPositions_F()
 	int posp = 0;
 	for (int n = 0;n < nNodes; ++n) {
 		//&nodes[n].ndof[n]->v
-		for (int d = 0; d <nodes[n].ndof[n].v; ++d){ // num dof for node (n)
+		for (int d = 0; d <ndofpn; ++d){ // num dof for node (n)
+			cout << "d is: " <<d << "\n";
 			if (nodes[n].ndof[d].p == true){ // prescribed dof
 				posp = posp - 1;
 				nodes[n].ndof[d].pos = posp;
@@ -291,7 +294,10 @@ void FEMSolver::setElementDofMap_ae()
 	cout << "trying to set elementDofMap \n";
 	PhyElement* pe;
 	for (int e = 0; e < ne; ++e)
-	pes[e]->setElementDofMap_ae(ndofpn);
+	{
+		cout << "We are looping over element" << e << "\n";
+		pes[e]->setElementDofMap_ae(ndofpn);
+	}
 }
 
 
@@ -305,8 +311,13 @@ void FEMSolver::Calculate_ElementStiffness_Force()
 void FEMSolver::Assemble()
 {
 	PhyElement* pe;
+
+	cout << "Assembly: ne is " << ne << "\n";
 	for (int e = 0; e < ne; ++e)
+	{
+	cout << "e is" << e << "\n";
 	pes[e]->AssembleStiffnessForce(K, F);
+	}
 }
 
 bool FEMSolver::Solve_Dofs()

@@ -66,17 +66,17 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 	// Step 8:
 	// End of his code that we borrow
 	dofMap.resize(nedof);
-	int cntr = 0;
+	int ecdof = 0;
 	for (int en = 0; en < neNodes; ++en)
 	{
 		for (int endof = 0; endof < ndofpn; ++endof)
 		{
 			if (eNodePtrs[en]->ndof[endof].p == true)
 			{
-				edofs(cntr) = eNodePtrs[en]->ndof[endof].v;
+				edofs(ecdof) = eNodePtrs[en]->ndof[endof].v;
 			}
-			  dofMap[cntr] = eNodePtrs[en]->ndof[endof].pos;
-			cntr= cntr+1;
+			  dofMap[ecdof] = eNodePtrs[en]->ndof[endof].pos;
+			ecdof= ecdof+1;
 		}
 	}
 }
@@ -86,33 +86,50 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 {
 	// Complete
-
+	Calculate_ElementStiffness_Force();
 	// Step 11
 	foe.resize(nedof);
 	fee.resize(nedof);
+
 	if (foe.size() == nedof)
 	fee = foe;
 	else
 	fee = 0.0;
 
-	int I, J;
+	int I =0;
+	int J =0;
+	cout << ke << "\n";
+	cout << "neDOF is " << nedof << "\n";
 	for (int i = 0; i < nedof; ++i)
 	{
 		I = dofMap[i];
+		cout << "i is " << i << "\n";
+		cout << "I is " << I << "\n";
 		if (I < 0) // prescribed dof
 		continue;
 		for (int j = 0; j < nedof; ++j)
 		{
 			J = dofMap[j];
+			cout << "j is " << j << "\n";
+			cout << "J is " << J << "\n";
 			if (J < 0) // prescribed
+			{
 			fee(i) -= ke(i,j) * edofs(j);
+			}
 			else
-			globalK(I,J) += ke(i,j);
+			{
+			cout << i << "," << j << "\n";
+			cout << I << "," << I << "\n";
+			globalK(I-1,J-1) += ke(i,j);
+			cout << "i broke setting K or accessing ke \n";
+			}
 		}
 		globalF(I) += fee(i);
+
 	}
 	/*
 	*/
+	cout << "boy i sure do love winning \n";
 }
 
 void PhyElement::UpdateElementForces_GlobalFp(VECTOR& Fp)

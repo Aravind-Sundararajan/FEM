@@ -92,8 +92,8 @@ public:
 	//int nNodeInElement; //number of nodes per element
 	//vector<int> eNodesTmp;//
 	//vector <PhyNode*> eNodePtrsTmp;//
-	int posf;
-	int posp;
+	//int posf;
+	//int posp;
 	int nmats;	// number of materials
 	map<int, PhyMaterial> mats;
 };
