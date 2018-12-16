@@ -21,6 +21,7 @@ public:
 	vector <PhyDof> ndof;
 	int nndof;	// number of dofs
 	int posn;
+
 };
 
 ostream& operator<<(ostream& out, const PhyNode& node);

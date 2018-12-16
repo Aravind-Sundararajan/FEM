@@ -40,20 +40,20 @@ void PhyNode::set_nndof(int nndofIn)
 
 void PhyNode::UpdateNodePrescribedDofForces(VECTOR& Fp)
 {
-	/*
+
 	// complete
-	for (int n = 1; n<node.coordinate.size(); ++n)
-	{
-		for (int dofi = 1;dofi < node[n].nndof; ++dofi) //num dof for node (n)
+
+	//nodes
+		for (int dofi = 1;dofi < nndof; ++dofi) //num dof for node (n)
 		{
-			if (node[n].ndof[dofi].p == true) //prescribed dof
+			if (ndof[dofi].p == true) //prescribed dof
 			{
-				posn = node[n].ndof[dofi].pos; //position of dof in global prescribed force F p
-				node[n].ndof[dofi].f = Fp[-posn];
+				posn = ndof[dofi].pos; //position of dof in global prescribed force F p
+				ndof[dofi].f = Fp(-posn);
 				//1. set prescribed dof force to corresponding force in global Fp (F p )
 				//2. posn < 0; prescribed dof
 			}
 		}
-	}
+	/*
 	*/
 }

@@ -78,37 +78,6 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 			cntr= cntr+1;
 		}
 	}
-/*
-	int gn;
-	int ecdof = 1; // dof counter for element
-	for (int en = 1; en < neNodes; ++en)
-	{ // number of element nodes
-		gn = LEM[en]; // global node number for element node en
-		for (int endof = 1;endof < ndofpn; ++endof) // This number isxed now, e.g., 2 for 2D trusses
-		{
-			dofMap[ecdof] = node[gn].dof[endof].pos;
-			//gndof = endof, we bypass some steps here
-			ecdof = ecdof + 1; // increment counter
-		}
-	}
-
-	// Step 9:
-	dofs = zeros(nedof); // element dofs (edof) resized to number of element dofs and zeroed
-	ecdof = 1; // dof counter for element
-	for (int en = 1; en < neNodes; ++en)
-	{ // number of element nodes
-		gn = LEM[en]; // global node number for element node en
-		for (int endof = 1;endof < ndofpn; ++endof)
-		{ // This number isxed now, e.g., 2 for 2D trusses
-			if (node[gn].dof[endof].p == true) // gndof = endof we bypass some steps here
-			dofs[ecdof] = node[gn].dof[endof].value; // e dof val = corresponding global val
-		}
-		dofMap[ecdof] = node[gn].dof[endof].pos;
-		ecdof = ecdof + 1; // increment counter
-	}
-*/
-/*
-
 }
 
 // Step 10 is: Compute element stiffness/force (ke, foe (fre: source term; fNe: Neumann BC))
@@ -116,8 +85,9 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 {
 	// Complete
-	/*
+
 	// Step 11
+	foe.resize(nedof);
 	fee.resize(nedof);
 	if (foe.size() == nedof)
 	fee = foe;
@@ -129,7 +99,7 @@ void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 	{
 		I = dofMap[i];
 		if (I < 0) // prescribed dof
-		continue
+		continue;
 		for (int j = 0; j < nedof; ++j)
 		{
 			J = dofMap[j];
@@ -140,29 +110,36 @@ void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 		}
 		globalF(I) += fee(i);
 	}
+	/*
 	*/
 }
 
 void PhyElement::UpdateElementForces_GlobalFp(VECTOR& Fp)
 {
 	// Complete
-	/*
-	for (int e = 1; e < ne; ++e) //loop over elements
+	//foe.resize(nedof);
+	//fee.resize(nedof);
+	// Elements
+	int I = 0;
+	for (int e = 0;e < neNodes; ++e)//loop over elements
 	{
-		fee = feo; //element total force = element all forces except essential force
-		for i = 1:nedof //loop over rows of ke; nedof = element # dof
-		I = dofMap(i); //local to global dof map M et
-		if (I < 0) //I corresponds to a prescribed dof, we skip free dofs
+		fee = foe; //element total force = element all forces except essential force
+		for (int i = 1; i < nedof; i++) //loop over rows of ke; nedof = element # dof
 		{
-			for (int j = 1; j < nedof; ++j) //loop over columns of ke. ALL columns (dofs) of p and f used
+			I = dofMap[i]; //local to global dof map M et
+			if (I < 0) //I corresponds to a prescribed dof, we skip free dofs
 			{
-				fee[i] = fee[i] - ke[i, j] * edofs[j]; //edofs: element dofs = a e
+				for (int j = 0; j <nedof; ++j) // loop over columns of ke. ALL columns (dofs) of p and f used
+				{
+					fee(i) = fee(i) - ke(i, j) * edofs(j); //edofs: element dofs = a e
+				}
+				Fp(-I) = Fp(-I) - fee(i);
+				//1. element’s total force fee component i’th is computed→added to Fp(-I)
+				//2. -I used because I < 0: prescribed dof
+				//3. fee is subtracted
 			}
-			Fp[-I] = Fp[-I] - fee[i];
 		}
-		//1. element’s total force fee component i’th is computed→added to Fp(-I)
-		//2. -I used because I < 0: prescribed dof
-		//3. fee is subtracted
 	}
+		/*
 	*/
 }

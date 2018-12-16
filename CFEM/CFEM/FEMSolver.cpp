@@ -141,12 +141,12 @@ void FEMSolver::Input(istream& in)
 		matID = pe->matID;
 		pe->setInternalMaterialProperties(&mats[matID]);
 	}
-		//return in;
-		//verifying the input
-		cout << "dim " << dim << "\n";
-		cout << "ndofpn " << ndofpn << "\n";
-		cout << "nNodes " << nNodes << "\n";
-		cout << "nElements " << ne << "\n";
+	//return in;
+	//verifying the input
+	cout << "dim " << dim << "\n";
+	cout << "ndofpn " << ndofpn << "\n";
+	cout << "nNodes " << nNodes << "\n";
+	cout << "nElements " << ne << "\n";
 }
 
 istream& operator>>(istream& input, FEMSolver& dat)
@@ -228,29 +228,29 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 	//Calculate_ElementStiffness_Force();
 
 	// Step 11: Assembly from local to global system
-	//Assemble();
+	Assemble();
 	// Step 12: Solve global (free) dof a from Ka = F
 	// successful solution returns true
-//	if (Solve_Dofs() == false)
-//	THROW("Matrix solve failed\n");
+	if (Solve_Dofs() == false)
+	THROW("Matrix solve failed\n");
 	// Step 13: Assign a to nodes and elements
-//	Assign_dof();
+	Assign_dof();
 	// Step 14: Compute prescribed dof forces
-	//UpdateFpNodalPrescribedForces();
+	UpdateFpNodalPrescribedForces();
 
 	/////////////////////////////////////////////////////////////////////////
 	// output
-//	string outputFileName;
-//	outputFileName = runName + "Output.txt";
-//	fstream out(outputFileName.c_str(), ios::out);
-//	out << (*this);
+		string outputFileName;
+		outputFileName = runName + "Output.txt";
+		fstream out(outputFileName.c_str(), ios::out);
+		out << (*this);
 }
 
 void FEMSolver::setSizes()
 {
 	// Complete
-K.resize(ndof,ndof);
-F.resize(ndof);
+	K.resize(ndof,ndof);
+	F.resize(ndof);
 	//PhyElement* pe;
 	//for (int e = 0; e < ne; ++e)
 	//pes[e]->setNodeConnectivity_Sizes(nNodeInElement, ndofpn, eNodesTmp, eNodePtrsTmp);
@@ -262,7 +262,7 @@ void FEMSolver::setPositions_F()
 	int posf = 0;
 	int posp = 0;
 	for (int n = 0;n < nNodes; ++n) {
-		 //&nodes[n].ndof[n]->v
+		//&nodes[n].ndof[n]->v
 		for (int d = 0; d <nodes[n].ndof[n].v; ++d){ // num dof for node (n)
 			if (nodes[n].ndof[d].p == true){ // prescribed dof
 				posp = posp - 1;
@@ -283,7 +283,7 @@ void FEMSolver::setElementDofMap_ae()
 	for (int e = 0; e < ne; ++e)
 	pes[e]->setElementDofMap_ae(ndofpn);
 }
-/*
+
 
 void FEMSolver::Calculate_ElementStiffness_Force()
 {
@@ -310,22 +310,27 @@ bool FEMSolver::Solve_Dofs()
 
 void FEMSolver::Assign_dof()
 {
+	int posn = 0;
 	//Complete
 	//assign to nodes
-	for (int n = 1; n < nNodes; ++n) {
-		for (int dofi = 1; dofi< node(n).nndof; ++dofi) {//num dof for node (n)
-			if (node(n).ndof(dofi).p == false) {//free dof
-				posn = node(n).ndof(dofi).pos; //position of dof in global free F
-				node(n).ndof(dofi).v = dofs(posn); //set free dof val to corresponding val in global dofs (a)
+	for (int n = 0; n < nNodes; ++n)
+	{
+		for (int dofi = 0; dofi< nodes[n].nndof; ++dofi)//num dof for node (n)
+		{
+			if (nodes[n].ndof[dofi].p == false) //free dof
+			{
+				posn = nodes[n].ndof[dofi].pos; //position of dof in global free F
+				nodes[n].ndof[dofi].v = dofs(posn); //set free dof val to corresponding val in global dofs (a)
 			}
 		}
 	}
 	// assign to elements
-	for (int e = 1; e < ne; ++e){// loop over elements
-		for (int i =1; i < element(e).nedof; ++i){ //loop over element dofs; nedof = # dof (nedof )
-			posn = element(e).dofMap(i) //corresponding global position using dofMat (Met)
-			if (posn > 0) {//free dof
-				element(e).edofs(i) = dofs(posn);
+	for (int e = 0; e < ne; ++e){// loop over elements
+		for (int i =0; i < pes[e]->nedof; ++i){ //loop over element dofs; nedof = # dof (nedof )
+			posn = pes[e]->dofMap[i]; //corresponding global position using dofMat (Met)
+			if (posn > 0) //free dof
+			{
+				pes[e]->edofs(i) = dofs(posn);
 				//set free element dof ae to corresponding val in global dofs (a)
 			}
 		}
@@ -342,6 +347,7 @@ void FEMSolver::UpdateFpNodalPrescribedForces()
 
 	PhyNode* pn;
 	for (int n = 0; n < nNodes; ++n) //loop over the elements
-	pes[e]->UpdateElementForces_GlobalFp(F);
+	nodes[n].UpdateNodePrescribedDofForces(F);
 }
+/*
 */
