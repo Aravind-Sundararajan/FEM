@@ -1,6 +1,7 @@
 #include "PhyElement.h"
 #include "PhyElementBar.h"
 #include "PhyElementTruss.h"
+#include "PhyElementFrame.h"
 #include "PhyNode.h"
 #include "PhyDof.h"
 #include "CFEMTypes_Global.h"
@@ -19,6 +20,12 @@ PhyElement* PhyElementFactory(ElementType eTypeIn)
 		break;
 		case etTruss:
 		pePtr = new PhyElementTruss();
+		break;
+		case etBar:
+		pePtr = new PhyElementFrame();
+		break;
+		case etBar:
+		pePtr = new PhyElementBeam();
 		break;
 		default:
 		THROW("the type is not defined");

@@ -1,0 +1,3 @@
+c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe:C:\Users\Aaron\Documents\GitHub\FEM\CFEM\CFEM\TrussExt.txt: file format not recognized; treating as linker script
+c:/mingw/bin/../lib/gcc/mingw32/6.3.0/../../../../mingw32/bin/ld.exe:C:\Users\Aaron\Documents\GitHub\FEM\CFEM\CFEM\TrussExt.txt:1: syntax error
+collect2.exe: error: ld returned 1 exit status
