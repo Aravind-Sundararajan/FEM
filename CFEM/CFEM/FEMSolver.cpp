@@ -212,42 +212,51 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 	//	in >> (*this);
 	in.close();
 
+	ndof = nNodes*ndofpn;
+	nf = ndof - np;
+
 	/////////////////////////////////////////////////////////////////////////
 	// steps
 
 	// Step 3
 	setSizes();
+	cout << "1 \n";
 	// Step 4; set prescribed dofs: already done when reading the input file
 	// Step 5: Set global free nodal dof: already done when reading the input file
 	// Step 6 and Step 7: dof positions; Step 7: Set F
 	setPositions_F();
+	cout << "2 \n";
 	// Step 8: Element dof maps Me
 	// Step 9: Set element dofs ae
 	setElementDofMap_ae();
+	cout << "3 \n";
 	// Step 10: Compute element stiness
 	//Calculate_ElementStiffness_Force();
 
 	// Step 11: Assembly from local to global system
 	Assemble();
+	cout << "4 \n";
 	// Step 12: Solve global (free) dof a from Ka = F
 	// successful solution returns true
 	if (Solve_Dofs() == false)
 	THROW("Matrix solve failed\n");
 	// Step 13: Assign a to nodes and elements
 	Assign_dof();
+	cout << "5 \n";
 	// Step 14: Compute prescribed dof forces
 	UpdateFpNodalPrescribedForces();
-
+	cout << "6 \n";
 	/////////////////////////////////////////////////////////////////////////
 	// output
-		string outputFileName;
-		outputFileName = runName + "Output.txt";
-		fstream out(outputFileName.c_str(), ios::out);
-		out << (*this);
+	string outputFileName;
+	outputFileName = runName + "Output.txt";
+	fstream out(outputFileName.c_str(), ios::out);
+	out << (*this);
 }
 
 void FEMSolver::setSizes()
 {
+
 	// Complete
 	K.resize(ndof,ndof);
 	F.resize(ndof);
@@ -279,6 +288,7 @@ void FEMSolver::setPositions_F()
 
 void FEMSolver::setElementDofMap_ae()
 {
+	cout << "trying to set elementDofMap \n";
 	PhyElement* pe;
 	for (int e = 0; e < ne; ++e)
 	pes[e]->setElementDofMap_ae(ndofpn);

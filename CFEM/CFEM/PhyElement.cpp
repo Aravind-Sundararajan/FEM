@@ -52,7 +52,8 @@ void PhyElement::setNodeConnectivity_Sizes(int nNodeInElement, int ndofpnIn, vec
 	eNodePtrs.resize(neNodes);
 	eNodePtrs = eNodePtrsIn;
 	// resizing members in PhyElement
-
+	ndofpn = ndofpnIn;
+	nedof = neNodes*ndofpn;
 	// Complete
 	//...
 }
@@ -61,7 +62,7 @@ void PhyElement::setNodeConnectivity_Sizes(int nNodeInElement, int ndofpnIn, vec
 void PhyElement::setElementDofMap_ae(int ndofpn)
 {
 	// Complete
-	//edofs
+	edofs.resize(ndofpn);
 	// Step 8:
 	// End of his code that we borrow
 	dofMap.resize(nedof);
