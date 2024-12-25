@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -g -O2 -Wall
+CFLAGS = -ggdb -O0 -Wall
 INCLUDES = -I ./src/ -I /usr/local/include
 srcdir := ./src/
 bindir := ./bin/

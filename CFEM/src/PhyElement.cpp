@@ -70,7 +70,8 @@ void PhyElement::setNodeConnectivity_Sizes(int nNodeInElement, int ndofpnIn, vec
     // Assuming these are member variables of PhyElement
     ke.resize(neNodes * ndofpn, neNodes * ndofpn);
     foe.resize(neNodes * ndofpn);
-
+	edofs.resize(ndofpn);
+	nedof = ndofpn;
 
 }
 
@@ -82,6 +83,7 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 	// Step 8:
 	// End of his code that we borrow
 	dofMap.resize(nedof);
+	cout << "nedof: "<< nedof << endl;
 	int cntr = 0;
 	for (int en = 0; en < neNodes; ++en)
 	{
@@ -89,10 +91,12 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 		{
 			if (eNodePtrs[en]->ndof[endof].p == true)
 			{
-				cout << "cntr:  "<< cntr << endl;
+				cout << "val:  "<< eNodePtrs[en]->ndof[endof].v << endl;
 				edofs(cntr) = eNodePtrs[en]->ndof[endof].v;
 			}
-			  dofMap[cntr] = eNodePtrs[en]->ndof[endof].pos;
+			cout << "pos:  "<< eNodePtrs[en]->ndof[endof].pos << endl;
+			cout << "cntr:  "<< cntr << endl;
+			dofMap[cntr] = eNodePtrs[en]->ndof[endof].pos;
 			cntr= cntr+1;
 		}
 	}

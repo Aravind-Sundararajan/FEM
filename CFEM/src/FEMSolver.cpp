@@ -228,6 +228,7 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 	// Step 8: Element dof maps Me
 	// Step 9: Set element dofs ae
 	setElementDofMap_ae();
+	cout << "frufidone" << endl;
 	// // Step 10: Compute element stiness
 	// //Calculate_ElementStiffness_Force();
 
