@@ -9,15 +9,15 @@ int main()
 //	testMatrixInversion();
 //	return 0;
 
-	string runName;
-	cout << "runName\t";
-	cin >> runName;
+	string runName="TrussTest";
+	// cout << "runName\t";
+	// cin >> runName;
 
-	bool verboseIn;
-	int tmpi;
-	cout << "verbose\t";
-	cin >> tmpi;
-	verboseIn = (bool)tmpi;
+	bool verboseIn=true;
+	// int tmpi;
+	// cout << "verbose\t";
+	// cin >> tmpi;
+	//verboseIn = (bool)tmpi;
 	FEMSolver femSolver;
 	femSolver.FEMSolve(runName, verboseIn);
 	return 0;

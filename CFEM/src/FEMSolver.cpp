@@ -4,6 +4,7 @@
 #include "LAFuncs.h"
 #include "PhyGlobal.h"
 #include "CFEMTypes_Global.h"
+#include <iostream>
 
 
 // in C++ do not write friend again (similar to virtual)
@@ -104,8 +105,10 @@ void FEMSolver::Input(istream& in)
 
 	int nnzdof; // num of nonzero force free Dofs;
 	in >> buf >> buf >> nnzdof;
-
+	nf = nnzdof;
+	ndof = nf + np;
 	in >> buf >> buf >> buf ; //node  node_dof_index  value
+	cout << "nnzdof: " << nnzdof << endl;
 	for (int i = 0; i < nnzdof; ++i)
 	{
 		in  >> nodeid >> dofid >> value;
@@ -147,6 +150,7 @@ void FEMSolver::Input(istream& in)
 	cout << "ndofpn " << ndofpn << "\n";
 	cout << "nNodes " << nNodes << "\n";
 	cout << "nElements " << ne << "\n";
+	cout <<"Done!" << "\n";
 }
 
 istream& operator>>(istream& input, FEMSolver& dat)
@@ -224,30 +228,31 @@ void FEMSolver::FEMSolve(string& runName, bool verboseIn)
 	// Step 8: Element dof maps Me
 	// Step 9: Set element dofs ae
 	setElementDofMap_ae();
-	// Step 10: Compute element stiness
-	//Calculate_ElementStiffness_Force();
+	// // Step 10: Compute element stiness
+	// //Calculate_ElementStiffness_Force();
 
-	// Step 11: Assembly from local to global system
-	Assemble();
-	// Step 12: Solve global (free) dof a from Ka = F
-	// successful solution returns true
-	if (Solve_Dofs() == false)
-	THROW("Matrix solve failed\n");
-	// Step 13: Assign a to nodes and elements
-	Assign_dof();
-	// Step 14: Compute prescribed dof forces
-	UpdateFpNodalPrescribedForces();
+	// // Step 11: Assembly from local to global system
+	// Assemble();
+	// // Step 12: Solve global (free) dof a from Ka = F
+	// // successful solution returns true
+	// if (Solve_Dofs() == false)
+	// THROW("Matrix solve failed\n");
+	// // Step 13: Assign a to nodes and elements
+	// Assign_dof();
+	// // Step 14: Compute prescribed dof forces
+	// UpdateFpNodalPrescribedForces();
 
-	/////////////////////////////////////////////////////////////////////////
-	// output
-		string outputFileName;
-		outputFileName = runName + "Output.txt";
-		fstream out(outputFileName.c_str(), ios::out);
-		out << (*this);
+	///////////////////////////////////////////////////////////////////////
+	//output
+		// string outputFileName;
+		// outputFileName = runName + "Output.txt";
+		// fstream out(outputFileName.c_str(), ios::out);
+		// out << (*this);
 }
 
 void FEMSolver::setSizes()
 {
+	cout<< "ndof: " << ndof << endl;
 	// Complete
 	K.resize(ndof,ndof);
 	F.resize(ndof);

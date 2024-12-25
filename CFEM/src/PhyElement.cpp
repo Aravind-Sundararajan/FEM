@@ -1,4 +1,5 @@
 #include "PhyElement.h"
+#include "PhyElementBeam.h"
 #include "PhyElementBar.h"
 #include "PhyElementTruss.h"
 #include "PhyElementFrame.h"
@@ -21,10 +22,10 @@ PhyElement* PhyElementFactory(ElementType eTypeIn)
 		case etTruss:
 		pePtr = new PhyElementTruss();
 		break;
-		case etBar:
+		case etFrame:
 		pePtr = new PhyElementFrame();
 		break;
-		case etBar:
+		case etBeam:
 		pePtr = new PhyElementBeam();
 		break;
 		default:
@@ -62,6 +63,15 @@ void PhyElement::setNodeConnectivity_Sizes(int nNodeInElement, int ndofpnIn, vec
 
 	// Complete
 	//...
+	// Set the number of degrees of freedom per node
+    ndofpn = ndofpnIn;
+
+    // Resize other member variables based on the new sizes
+    // Assuming these are member variables of PhyElement
+    ke.resize(neNodes * ndofpn, neNodes * ndofpn);
+    foe.resize(neNodes * ndofpn);
+
+
 }
 
 
@@ -79,6 +89,7 @@ void PhyElement::setElementDofMap_ae(int ndofpn)
 		{
 			if (eNodePtrs[en]->ndof[endof].p == true)
 			{
+				cout << "cntr:  "<< cntr << endl;
 				edofs(cntr) = eNodePtrs[en]->ndof[endof].v;
 			}
 			  dofMap[cntr] = eNodePtrs[en]->ndof[endof].pos;
@@ -94,24 +105,24 @@ void PhyElement::AssembleStiffnessForce(MATRIX& globalK, VECTOR& globalF)
 	// Complete
 
 	// Step 11
-	foe.resize(nedof);
+	//foe.resize(nedof);
 	fee.resize(nedof);
 	if (foe.size() == nedof)
-	fee = foe;
+		fee = foe;
 	else
-	fee = 0.0;
+		fee = 0.0;
 
 	int I, J;
 	for (int i = 0; i < nedof; ++i)
 	{
 		I = dofMap[i];
 		if (I < 0) // prescribed dof
-		continue;
+			continue;
 		for (int j = 0; j < nedof; ++j)
 		{
 			J = dofMap[j];
 			if (J < 0) // prescribed
-			fee(i) -= ke(i,j) * edofs(j);
+				fee(i) -= ke(i,j) * edofs(j);
 			else
 			globalK(I,J) += ke(i,j);
 		}
